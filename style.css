@@ -1,0 +1,33 @@
+@font-face {
+    font-family: titleFont;
+    src: url(assets/fonts/DelaGothicOne-Regular.ttf);
+}
+
+@font-face {
+    font-family: bodyFont;
+    src: url(assets/fonts/Baloo2-Medium.ttf);
+}
+
+.messageBox {
+    background-color: gray; 
+    padding: 30px; 
+    width: 900px;
+    font-size: 25px;
+    color: white;
+    font-family: bodyFont;
+    border-radius: 28px;
+    position: relative;
+    bottom: 80px;  /* position the top  edge of the element at the middle of the parent */
+    left: 600px; /* position the left edge of the element at the middle of the parent */
+    transform: translate(-50%, -50%);
+}
+
+.npcName {
+    position: absolute; 
+    top: -80px;
+    left: 0px;
+    border-radius: 28px;
+    padding: 25px;
+    font-size: 30px;
+    font-family: titleFont;
+}
