@@ -1,0 +1,7 @@
+Name,X,Y,Image
+NorthFull,(canvasWidth/2),(canvasHeight/2) - 285,assets/Apartment/AptNSFullWall.png
+SouthFull,(canvasWidth/2),(canvasHeight/2) + 290,assets/Apartment/AptNSFullWall.png
+EastTop,(canvasWidth/2) + 485.5,(canvasHeight/2) - 200,assets/Apartment/AptEWOpenWall.png
+EastBottom,(canvasWidth/2) + 485.5,(canvasHeight/2) + 200,assets/Apartment/AptEWOpenWall.png
+WestFull,(canvasWidth/2) - 485.5,(canvasHeight/2),assets/Apartment/AptEWFullWall.png
+

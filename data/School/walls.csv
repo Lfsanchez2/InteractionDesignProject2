@@ -1,0 +1,4 @@
+Name,X,Y,Image
+North,(canvasWidth/2),(canvasHeight/2) - 275,assets/Hallway/HallwayWallNS.png
+South,(canvasWidth/2),(canvasHeight/2) + 275,assets/Hallway/HallwayWallNS.png
+East,(canvasWidth/2) + 480,(canvasHeight/2),assets/Hallway/HallwayWallEWFull.png

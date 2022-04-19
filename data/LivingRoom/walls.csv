@@ -1,0 +1,8 @@
+Name,X,Y,Image
+NorthLeft,(canvasWidth/2) - 300,(canvasHeight/2) - 285,assets/Apartment/AptNSOpenWall.png
+NorthRight,(canvasWidth/2) + 300,(canvasHeight/2) - 285,assets/Apartment/AptNSOpenWall.png
+WestTop,(canvasWidth/2) - 485.5,(canvasHeight/2) - 200,assets/Apartment/AptEWOpenWall.png
+WestBottom,(canvasWidth/2) - 485.5,(canvasHeight/2) + 200,assets/Apartment/AptEWOpenWall.png
+EastTop,(canvasWidth/2) + 485.5,(canvasHeight/2) - 200,assets/Apartment/AptEWOpenWall.png
+EastBottom,(canvasWidth/2) + 485.5,(canvasHeight/2) + 200,assets/Apartment/AptEWOpenWall.png
+SouthFull,(canvasWidth/2),(canvasHeight/2) + 290,assets/Apartment/AptNSFullWall.png

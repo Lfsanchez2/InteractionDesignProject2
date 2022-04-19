@@ -8,36 +8,28 @@
 
   <script src="p5.timer.js"></script>
 ***********************************************************************************/
-var titleFont, bodyFont, player, wallGroup, msgDiv, screen;
-
+var titleFont, bodyFont, player, msgDiv, currentScreen;
 
 var playerImg;
-var homeScreen, testScreen, selectScreen, instructionScreen;
 
-var npcArray = [];
 
-var cnv;
+var screenManager;
 
-var testTable;
+var canvasWidth = 1200;
+var canvasHeight = 700;
 
-var defaultGroup;
-
-function centerCanvas() {
-  var x = (windowWidth - width) / 2;
-  var y = (windowHeight - height) / 2;
-  cnv.position(x, y);
-}
+var northBound = (canvasHeight/2) - 300;
+var southBound = (canvasHeight/2) + 290;
+var eastBound = (canvasWidth/2) + 500;
+var westBound = (canvasWidth/2) - 500;
 
 function preload() {
   titleFont = loadFont('assets/fonts/DelaGothicOne-Regular.ttf');
   bodyFont = loadFont('assets/fonts/Baloo2-Medium.ttf');
-  playerImg = loadImage('assets/standingplayer1.png');
-  testScreen = new Screen();
-  testScreen.loadAppearanceTable('data/Screen3NPCs/testNPCAppearance.csv',
-  'data/Screen3NPCs/npcDialogue.csv');
-  homeScreen = new HomeScreen();
-  selectScreen = new SelectionScreen();
-  instructionScreen = new InstructionScreen();
+  playerImg = loadImage('assets/player/standingplayer1.png');
+
+  screenManager = new ScreenManager('data/screenMaster.csv');
+  
 }
 
 incrementScreen = function () {
@@ -45,93 +37,62 @@ incrementScreen = function () {
 }
 
 setPlayer = function() {
-  if(this.id === 0) {
+  if(this.id === 'avatar1') {
     player.newIdleImage('standing', playerImg);
-    player.newAnimation('walking','assets/playerwalk1.png', 'assets/playerwalk6.png');
+    player.newAnimation('walking','assets/player/playerwalk1.png', 
+    'assets/player,playerwalk6.png');
   }
 }
 
 // Setup code goes here
 function setup() {
-  cnv = createCanvas(1200, 700);
-  centerCanvas();
-  frameRate(30);
+  console.log(northBound);
+  createCanvas(canvasWidth, canvasHeight);
+  frameRate(45);
 
-  // wall1 = new Sprite('Wall1', 0, 100, 1400, 200);
-  // wall1.sprite.debug = true;
-  // wall2 = new Sprite('Wall2', 0, 600, 1400, 200);
-  // wall2.sprite.debug = true;
-  // wallGroup = new Group();
-  // wallGroup.add(wall1.sprite);
-  // wallGroup.add(wall2.sprite);
-  defaultGroup = new Group();
-  player = new Player('Luis', 100, height/2);
-  
+  player = new Player('Luis', width/2, height/2);
+  player.newIdleImage('standing', playerImg);
+  player.newAnimation('walking','assets/player/playerwalk1.png', 
+    'assets/player/playerwalk6.png');
+  player.sprite.scale = 0.8;
   player.sprite.debug = true;
-  defaultGroup.add(player.sprite);
 
-  testScreen.setup();
-  homeScreen.setup(bodyFont, incrementScreen);
-  selectScreen.setup(playerImg, setPlayer, incrementScreen);
-  instructionScreen.setup(incrementScreen);
-
-  screen = 0;
+  
   msgDiv = createDiv(
     '<div id = \'message\'></div>' + 
     '<div id = \'name\' class=\'npcName\'></div>' +
     '<div class=\'npcInstruction\'> Press \'e\' to continue conversation.');
   msgDiv.addClass('messageBox');
   msgDiv.hide();
- }
-
- function windowResized() {
-   centerCanvas();
+  screenManager.setup();
+  currentScreen = screenManager.getCurrentScreen();
  }
 
 // Draw code goes here
 function draw() {
   // could draw a PNG file here
-  background('#353535');
-  screenManager();
-}
+  background(0);
+ 
+  rectMode(CENTER);
+  fill(currentScreen.bgColor);
+  noStroke();
+  rect(canvasWidth/2, canvasHeight/2, 1040, 650, 18);
+  imageMode(CENTER);
+  if(currentScreen.backgroundImg != null) {
+    image(currentScreen.backgroundImg, canvasWidth/2, height/2);
+  }
+  currentScreen.draw();
+  checkMovement();
+  drawSprite(player.sprite);
+  
 
-function screenManager() {
-  if(screen === 0) {
-    rectMode(CENTER);
-    fill('#F4D1AE');
-    rect(width/2, height/2, 1140, 640, 28);
-    textAlign(CENTER);
-    textFont(titleFont);
-    textSize(70);
-    fill('#353535');
-    text('Living \'The Dream\'', width/2, 183);
-    fill('white')
-    text('Living \'The Dream\'', width/2, 180);
-    homeScreen.draw();
-  }
-  if(screen === 1) {
-    rectMode(CENTER);
-    fill('#F4D1AE');
-    rect(width/2, height/2, 1140, 640, 28);
-    selectScreen.draw(titleFont);
-  }
-  if(screen == 2) {
-    rectMode(CENTER);
-    fill('#F4D1AE');
-    rect(width/2, height/2, 1140, 640, 28);
-    instructionScreen.draw();
-    defaultGroup.draw();
-    checkMovement();
-    player.displayPlayerTag();
-  }
-  if(screen === 3) {
-    background('#F4D1AE');
-    // wallGroup.draw();
-    testScreen.draw();
-    defaultGroup.draw();
-    checkMovement();
-    player.displayPlayerTag();
-  }
+  stroke(color(255,255,255));
+  strokeWeight(2);
+  fill(color(0,0,0,100));
+  textAlign(LEFT);
+  textFont(titleFont);
+  textSize(25);
+  text(screenManager.currID, westBound+10, northBound+40);
 }
 
 // This will reset position
@@ -147,7 +108,8 @@ function keyPressed() {
 }
 
 function checkMovement() {
-  // player.checkCollision(wallGroup);
+  player.checkCollision(currentScreen.walls);
+  player.checkCollision(currentScreen.npcs);
   // Check x movement
   if(keyIsDown(68) || keyIsDown(39)) {
     player.sprite.velocity.x = 10;
@@ -174,6 +136,42 @@ function checkMovement() {
   else {
     player.sprite.velocity.y = 0;
   }
+
+  if (currentScreen.northNextScreen != null && 
+    player.sprite.position.y < northBound) {
+    currentScreen = screenManager.updateScreen(currentScreen.northNextScreen);
+    adjustPlayerSize();
+    player.sprite.position.y = southBound - 50;
+  }
+
+  if (currentScreen.southNextScreen != null && 
+    player.sprite.position.y > southBound) {
+      currentScreen = screenManager.updateScreen(currentScreen.southNextScreen);
+      adjustPlayerSize();
+      player.sprite.position.y = northBound + 50;
+  }
+
+  if (currentScreen.eastNextScreen != null && 
+    player.sprite.position.x > eastBound) {
+      currentScreen = screenManager.updateScreen(currentScreen.eastNextScreen);
+      adjustPlayerSize();
+      player.sprite.position.x = westBound + 50;
+  } 
+
+  if (currentScreen.westNextScreen != null && 
+    player.sprite.position.x < westBound) {
+      currentScreen = screenManager.updateScreen(currentScreen.westNextScreen);
+      adjustPlayerSize();
+      player.sprite.position.x = eastBound - 50;
+  } 
+
+  
 }
 
-
+function adjustPlayerSize() {
+  if(!screenManager.currID.startsWith('Memory Hall')) {
+    player.sprite.scale = 1;
+  } else {
+    player.sprite.scale = 0.7;
+  }
+}

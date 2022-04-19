@@ -1,4 +1,4 @@
 Name,X,Y,Static,ImageName,Image,Animated,AniName,StartFrame,EndFrame
-Tester NPC,600,350,1,idle,assets/standing.png,0,,,,
+Tester NPC,600,height/2,1,idle,assets/standing.png,0,,,,
 Average NPC,800,100,0,,,0,,,,
 Singluar,900,500,0,,,0,,,,
