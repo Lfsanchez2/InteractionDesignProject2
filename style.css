@@ -59,3 +59,24 @@ canvas {
     text-shadow: 2px 2px #353535;
     opacity: 0.6;
 }
+
+.nameInput {
+    position: absolute;
+    left: 90px;
+    top: 560px;
+    font-size: 20px;
+    font-family: bodyFont;
+    padding: 8px;
+    width: 300px;
+    text-align: center;
+}
+
+.inputButton {
+    position: absolute;
+    left: 409px;
+    top: 560px;
+    font-size: 20px;
+    font-family: bodyFont;
+    padding: 8px 20px;
+    border-radius: 0 30px 30px 0;
+}

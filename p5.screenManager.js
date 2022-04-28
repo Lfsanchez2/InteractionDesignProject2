@@ -8,9 +8,17 @@ class ScreenManager {
         this.screenTable = loadTable(screensPath, 'csv', 'header', this.preloadScreens);
     }
 
-    setup() {
-        this.allScreens.forEach((value) => {
-            value.setup();
+    setup(playerImg, player2Img, nextFunc, setNameFunc, characterSelectFunc, font) {
+        this.allScreens.forEach((key, value) => {
+            if(value === 'Home Screen') {
+                key.setup(nextFunc, font);
+            }
+            else if(value === 'Character Screen') {
+                key.setup(playerImg, player2Img, nextFunc, setNameFunc, characterSelectFunc, font);
+            } 
+            else {
+                key.setup();
+            }            
         })
     }
 
@@ -18,50 +26,65 @@ class ScreenManager {
         this.currID = this.screenTable.getString(0,'ID');
         for(let i = 0; i < this.screenTable.getRowCount(); i++) {
             let id = this.screenTable.getString(i, 'ID');
-            let npcCSV = this.screenTable.getString(i, 'NPC-CSV');
-            let interactionCSV = this.screenTable.getString(i, 'Interaction-CSV');
-            let wallsCSV = this.screenTable.getString(i, 'Walls-CSV');
-
-            if(npcCSV === "") {
-                npcCSV = null;
-            }
-            if(interactionCSV === "") {
-                interactionCSV = null;
-            }
-            if(wallsCSV === "") {
-                wallsCSV = null;
-            }
-
             let bgColor = this.screenTable.getString(i, 'bgColor');
-            let bgImg = null;
+            if (id === 'Home Screen') {
+                let currScreen = new HomeScreen(null, null, null, null, bgColor, null,null, null, null, null);
+                this.allScreens.set(id, currScreen);
+            }
+            else if (id === 'Character Screen') {
+                let currScreen = new CharacterScreen(null, null, null, null, bgColor, null,null, null, null, null);
+                this.allScreens.set(id, currScreen);
+            }
+            else {
 
-            if(this.screenTable.getNum(i, 'hasBG')) {
-                bgImg = this.screenTable.getString(i, 'BG-IMG');
-            }
+                let npcCSV = this.screenTable.getString(i, 'NPC-CSV');
+                let interactionCSV = this.screenTable.getString(i, 'Interaction-CSV');
+                let wallsCSV = this.screenTable.getString(i, 'Walls-CSV');
+                let decoCSV = this.screenTable.getString(i, 'Deco-CSV');
 
-            let northRoom = this.screenTable.getString(i, 'NorthRoom');
-            let southRoom = this.screenTable.getString(i, 'SouthRoom');
-            let westRoom = this.screenTable.getString(i, 'WestRoom');
-            let eastRoom = this.screenTable.getString(i, 'EastRoom');
+                if(npcCSV === "") {
+                    npcCSV = null;
+                }
+                if(interactionCSV === "") {
+                    interactionCSV = null;
+                }
+                if(wallsCSV === "") {
+                    wallsCSV = null;
+                }
+                if(decoCSV === "") {
+                    decoCSV = null;
+                }
 
-            if (northRoom === "") {
-                northRoom = null;
-            }
-            if (southRoom === "") {
-                southRoom = null;
-            }
-            if (westRoom === "") {
-                westRoom = null;
-            }
-            if (eastRoom === "") {
-                eastRoom = null;
-            }
+                let bgImg = null;
 
-            let currScreen = new Screen(
-                npcCSV, interactionCSV, wallsCSV, bgColor, bgImg,
-                northRoom, southRoom, eastRoom, westRoom
-            );
-            this.allScreens.set(id, currScreen);
+                if(this.screenTable.getNum(i, 'hasBG')) {
+                    bgImg = this.screenTable.getString(i, 'BG-IMG');
+                }
+
+                let northRoom = this.screenTable.getString(i, 'NorthRoom');
+                let southRoom = this.screenTable.getString(i, 'SouthRoom');
+                let westRoom = this.screenTable.getString(i, 'WestRoom');
+                let eastRoom = this.screenTable.getString(i, 'EastRoom');
+
+                if (northRoom === "") {
+                    northRoom = null;
+                }
+                if (southRoom === "") {
+                    southRoom = null;
+                }
+                if (westRoom === "") {
+                    westRoom = null;
+                }
+                if (eastRoom === "") {
+                    eastRoom = null;
+                }
+                
+                let currScreen = new Screen(
+                    npcCSV, interactionCSV, wallsCSV, decoCSV, bgColor, bgImg,
+                    northRoom, southRoom, eastRoom, westRoom
+                );
+                this.allScreens.set(id, currScreen);
+            }
         }
         console.log(this.allScreens);
     }
@@ -74,6 +97,4 @@ class ScreenManager {
     getCurrentScreen() {
         return this.allScreens.get(this.currID);
     }
-
-    
 }

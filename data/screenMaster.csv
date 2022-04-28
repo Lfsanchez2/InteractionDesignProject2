@@ -1,9 +1,11 @@
-ID,NPC-CSV,Interaction-CSV,Walls-CSV,bgColor,hasBG,BG-IMG,NorthRoom,SouthRoom,WestRoom,EastRoom,
-Memory Hall I,,,data/MemoryHall1/walls.csv,#26123B,1,assets/MemoryHall/MemoryHallFloor1.png,Memory Hall II,,Living Room,Hallway I
-Memory Hall II,,,data/MemoryHall2/walls.csv,#26123B,1,assets/MemoryHall/MemoryHallFloor2.png,,Memory Hall I,,Dad's Room
-Living Room,,,data/LivingRoom/walls.csv,#353535,1,assets/Apartment/ApartmentFloor.png,Mom's Room,,My Room,Memory Hall I
-Mom's Room,,,data/Mom'sRoom/walls.csv,#353535,1,assets/Apartment/ApartmentFloor.png,,Living Room,,
-My Room,,,data/MyRoom/walls.csv,#353535,1,assets/Apartment/ApartmentFloor.png,,,,Living Room
-Hallway I,,,data/Hallway/walls.csv,#353535,0,,,,Memory Hall I,Hallway II
-Hallway II,,,data/Hallway/walls.csv,#353535,0,,,,Hallway I,Classroom
-Classroom,,,data/School/walls.csv,#353535,0,,,,Hallway II,
+ID,NPC-CSV,Interaction-CSV,Walls-CSV,Deco-CSV,bgColor,hasBG,BG-IMG,NorthRoom,SouthRoom,WestRoom,EastRoom
+Home Screen,,,,,#F4D1AE,,,,,,
+Character Screen,,,,,#F4D1AE,,,,,,
+Memory Hall I,,,data/MemoryHall1/walls.csv,,#26123B,1,assets/MemoryHall/MemoryHallFloor1.png,Memory Hall II,,Living Room,Hallway I
+Memory Hall II,,,data/MemoryHall2/walls.csv,,#26123B,1,assets/MemoryHall/MemoryHallFloor2.png,,Memory Hall I,,Dad's Room
+Living Room,,,data/LivingRoom/walls.csv,,#353535,1,assets/Apartment/ApartmentFloor.png,Mom's Room,,My Room,Memory Hall I
+Mom's Room,data/Mom'sRoom/npcs.csv,data/Mom'sRoom/dialogue.csv,data/Mom'sRoom/walls.csv,data/Mom'sRoom/deco.csv,#353535,1,assets/Apartment/ApartmentFloor.png,,Living Room,,
+My Room,,,data/MyRoom/walls.csv,,#353535,1,assets/Apartment/ApartmentFloor.png,,,,Living Room
+Hallway I,,,data/Hallway/walls.csv,,#353535,0,,,,Memory Hall I,Hallway II
+Hallway II,,,data/Hallway/walls.csv,,#353535,0,,,,Hallway I,Classroom
+Classroom,,,data/School/walls.csv,,#353535,0,,,,Hallway II,

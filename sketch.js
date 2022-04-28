@@ -10,7 +10,7 @@
 ***********************************************************************************/
 var titleFont, bodyFont, player, msgDiv, currentScreen;
 
-var playerImg;
+var playerImg, playerName;
 
 
 var screenManager;
@@ -23,25 +23,48 @@ var southBound = (canvasHeight/2) + 290;
 var eastBound = (canvasWidth/2) + 500;
 var westBound = (canvasWidth/2) - 500;
 
+var player2Img;
+
 function preload() {
   titleFont = loadFont('assets/fonts/DelaGothicOne-Regular.ttf');
   bodyFont = loadFont('assets/fonts/Baloo2-Medium.ttf');
   playerImg = loadImage('assets/player/standingplayer1.png');
+  player2Img = loadImage('assets/standing.png');
+  playerName = 'Player';
 
   screenManager = new ScreenManager('data/screenMaster.csv');
   
 }
 
-incrementScreen = function () {
-  screen++;
+incrementStartingScreens = function () {
+  if(screenManager.currID === 'Character Screen') {
+    currentScreen.removeHTML();
+  }
+  currentScreen = screenManager.updateScreen(currentScreen.nextID);
+  if(screenManager.currID === 'Character Screen') {
+    currentScreen.showHTML();
+  }
 }
+
 
 setPlayer = function() {
   if(this.id === 'avatar1') {
     player.newIdleImage('standing', playerImg);
     player.newAnimation('walking','assets/player/playerwalk1.png', 
-    'assets/player,playerwalk6.png');
+    'assets/player/playerwalk6.png');
+    currentScreen.updateSelection('You\'ve selected Player 1.');
+  } else {
+    player.newIdleImage('standing', player2Img);
+    currentScreen.updateSelection('You\'ve selected Player 2.');
   }
+}
+
+setName = function() {
+  playerName = currentScreen.input.value();
+  console.log(playerName);
+  textAlign(RIGHT);
+  fill('red');
+  text('Your name is ' + playerName, 100, 200);
 }
 
 // Setup code goes here
@@ -50,10 +73,7 @@ function setup() {
   createCanvas(canvasWidth, canvasHeight);
   frameRate(45);
 
-  player = new Player('Luis', width/2, height/2);
-  player.newIdleImage('standing', playerImg);
-  player.newAnimation('walking','assets/player/playerwalk1.png', 
-    'assets/player/playerwalk6.png');
+  player = new Player(playerName, width/2, height/2);
   player.sprite.scale = 0.8;
   player.sprite.debug = true;
 
@@ -64,7 +84,7 @@ function setup() {
     '<div class=\'npcInstruction\'> Press \'e\' to continue conversation.');
   msgDiv.addClass('messageBox');
   msgDiv.hide();
-  screenManager.setup();
+  screenManager.setup(playerImg, player2Img, incrementStartingScreens, setName, setPlayer, bodyFont);
   currentScreen = screenManager.getCurrentScreen();
  }
 
@@ -72,44 +92,73 @@ function setup() {
 function draw() {
   // could draw a PNG file here
   background(0);
- 
-  rectMode(CENTER);
-  fill(currentScreen.bgColor);
-  noStroke();
-  rect(canvasWidth/2, canvasHeight/2, 1040, 650, 18);
-  imageMode(CENTER);
-  if(currentScreen.backgroundImg != null) {
-    image(currentScreen.backgroundImg, canvasWidth/2, height/2);
-  }
-  currentScreen.draw();
-  checkMovement();
-  drawSprite(player.sprite);
-  
 
-  stroke(color(255,255,255));
-  strokeWeight(2);
-  fill(color(0,0,0,100));
-  textAlign(LEFT);
-  textFont(titleFont);
-  textSize(25);
-  text(screenManager.currID, westBound+10, northBound+40);
+  if(screenManager.currID === 'Home Screen' || screenManager.currID === 'Character Screen') {
+    currentScreen.draw();
+    textFont(titleFont);
+    
+    if(screenManager.currID === 'Character Screen') {
+      fill('#353535');
+      text(currentScreen.title, width/2, 123);
+      fill('white')
+      text(currentScreen.title, width/2, 120);
+      textSize(25);
+      textFont(bodyFont);
+      text(currentScreen.selectionText, width/2, 180);
+    } else {
+      fill('#353535');
+      text(currentScreen.title, width/2, 183);
+      fill('white')
+      text(currentScreen.title, width/2, 180);
+    }
+  } 
+  else {
+    rectMode(CENTER);
+    fill(currentScreen.bgColor);
+    noStroke();
+    rect(canvasWidth/2, canvasHeight/2, 1040, 650, 18);
+
+    imageMode(CENTER);
+    if(currentScreen.backgroundImg != null) {
+      image(currentScreen.backgroundImg, canvasWidth/2, height/2);
+    }
+
+    currentScreen.draw();
+    checkMovement();
+    drawSprite(player.sprite);
+
+    stroke(color(255,255,255));
+    strokeWeight(2);
+    fill(color(0,0,0,100));
+    textAlign(LEFT);
+    textFont(titleFont);
+    textSize(25);
+    text(screenManager.currID, westBound+10, northBound+20);
+  }
 }
 
 // This will reset position
 function keyPressed() {
   if(key === 'e') {
-    for(let i = 0; i < testScreen.npcs.length; i++) {
-      if(player.checkNPCOverlap(testScreen.npcs[i]) && 
-      testScreen.npcs[i].isActive) {
-        testScreen.npcs[i].continueInteraction();
-      } 
-    }
+    let currNPCs = currentScreen.npcArray;
+    currNPCs.forEach(e => {
+      if(player.checkNPCOverlap(e) && e.isActive) {
+        e.continueInteraction();
+      }
+    })
+    // for(let i = 0; i < testScreen.npcs.length; i++) {
+    //   if(player.checkNPCOverlap(testScreen.npcs[i]) && 
+    //   testScreen.npcs[i].isActive) {
+    //     testScreen.npcs[i].continueInteraction();
+    //   } 
+    // }
   }
 }
 
 function checkMovement() {
   player.checkCollision(currentScreen.walls);
-  player.checkCollision(currentScreen.npcs);
+  player.checkCollision(currentScreen.decoColliders);
+  // player.checkCollision(currentScreen.npcs);
   // Check x movement
   if(keyIsDown(68) || keyIsDown(39)) {
     player.sprite.velocity.x = 10;
@@ -169,9 +218,13 @@ function checkMovement() {
 }
 
 function adjustPlayerSize() {
-  if(!screenManager.currID.startsWith('Memory Hall')) {
-    player.sprite.scale = 1;
-  } else {
+  if(screenManager.currID.startsWith('Memory Hall')) {
     player.sprite.scale = 0.7;
+  }
+  else if(screenManager.currID === 'Classroom') {
+    player.sprite.scale = 0.7;
+  }
+  else {
+    player.sprite.scale = 1.1;
   }
 }

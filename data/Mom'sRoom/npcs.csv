@@ -1,0 +1,2 @@
+Name,X,Y,Static,ImageName,Image,Animated,AniName,StartFrame,EndFrame
+Mom,canvasWidth/2 - 60,270,1,idle,assets/mom.png,0,,
