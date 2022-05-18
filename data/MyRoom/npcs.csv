@@ -1,0 +1,3 @@
+Name,Prompt,Scale,X,Y,Static,ImageName,Image,Animated,AniName,StartFrame,EndFrame,Visible
+,Press 'e' to check laptop,1.3,230,168,1,idle,assets/Apartment/MyRoom/laptop.png,0,,,,1
+Backpack,Press 'e' to get backpack,0.9,450,450,1,idle,assets/Apartment/MyRoom/backpack.png,0,,,,1

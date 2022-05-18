@@ -10,10 +10,18 @@
 
 body {
     background-color: #353535;
+    /* padding: 0; 
+    margin: 0;
+    display: flex; 
+    justify-content: center; 
+    align-items: center; */
 }
 
-canvas {
-    overflow: hidden;
+#sketchHolder {
+    position: relative;
+    width: 1200px;
+    height: 700px;
+    margin: auto;
 }
 
 .startScreen {
@@ -24,15 +32,16 @@ canvas {
 }
 
 .messageBox {
-    background-color: gray; 
+    background-color: rgba(17, 181, 228, 0.8); 
     padding: 30px; 
     width: 900px;
     font-size: 25px;
     color: white;
     font-family: bodyFont;
     border-radius: 28px;
+    border: white 3px solid;
     position: absolute;
-    bottom: 0px;  /* position the top  edge of the element at the middle of the parent */
+    bottom: 15px;  /* position the top  edge of the element at the middle of the parent */
     left: 50%; /* position the left edge of the element at the middle of the parent */
     transform: translate(-50%, -50%);
     z-index: 10;
@@ -62,21 +71,96 @@ canvas {
 
 .nameInput {
     position: absolute;
-    left: 90px;
-    top: 560px;
+    left: 48%;
+    top: 82%;
     font-size: 20px;
     font-family: bodyFont;
     padding: 8px;
     width: 300px;
     text-align: center;
+    transform: translate(-50%, -50%);
 }
 
 .inputButton {
     position: absolute;
-    left: 409px;
-    top: 560px;
+    left: calc(48% + 213px);
+    top: 82%;
     font-size: 20px;
     font-family: bodyFont;
     padding: 8px 20px;
     border-radius: 0 30px 30px 0;
+    transform: translate(-50%, -50%);
+}
+
+.interactButton {
+    width: 100px;
+    padding: 6px;
+    margin-left: 60px;
+    font-family: bodyFont;
+    font-size: 25px;
+    border-radius: 30px;
+    border: none;
+    cursor: pointer;
+}
+
+.interactionDisplay {
+    width: 600px;
+    height: 400px;
+    /* overflow: auto; */
+    border: white solid 5px;
+    border-radius: 20px;
+    position: absolute;
+    left: 60%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(0,0,0,0.8);
+    padding: 15px;
+}
+
+.instructionDisplay {
+    width: 400px;
+    height: 260px;
+    border: #f4d1ae solid 6px;
+    overflow: auto;
+    border-radius: 20px;
+    position: absolute;
+    right: -12%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgba(53, 53, 53, 0.3);
+    padding: 15px 50px;
+    font-family: bodyFont;
+    color: white;
+}
+
+.laptop {
+    background-color: #4d4d4d;
+    border-radius: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.head {
+    float: left;
+    margin-bottom: 60px;
+    padding: 36px 0px;
+    width: 100%;
+    text-align: center;
+    font-family: titleFont;
+    font-size: 40px;
+    background-color: #2b2b2b;
+    color: #c7c7c7;
+    text-decoration: underline;
+    border-bottom: #4d4d4d double 15px;
+}
+
+.siteDiv {
+    width: 85%;
+    margin: auto;
+}
+
+.siteFrame {
+    width: 95%;
+    height: 400px;
+    margin: auto;
 }

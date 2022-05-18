@@ -1,0 +1,4 @@
+Name,X,Y,Image,Collision-Object,Scale
+TV,canvasWidth/2,(canvasHeight/2)-56,assets/Apartment/TV.png,1,0.86
+Stand,canvasWidth/2,(canvasHeight/2)+50,assets/Apartment/stand.png,0,0.9
+Couch,canvasWidth/2,(canvasHeight/2)+224,assets/Apartment/couch.png,1,1

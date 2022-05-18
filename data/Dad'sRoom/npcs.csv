@@ -1,0 +1,3 @@
+Name,Prompt,Scale,X,Y,Static,ImageName,Image,Animated,AniName,StartFrame,EndFrame,Visible
+Dad,Press 'e' to call Dad,3,(canvasWidth/2) - 270,canvasHeight/2,0,,,0,,,,0
+Dad Sprite,,1.5,(canvasWidth/2) + 300,canvasHeight/2,1,"Standing,Calling","assets/dad.png,assets/dadCall.png",0,,,,1

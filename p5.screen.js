@@ -11,21 +11,6 @@ function clickableHover() {
         this.textSize = 22;
         this.color = '#006c8a';
     }
-    if(this.id === 'avatar1' || this.id === 'avatar2') {
-        this.width = 200;
-        this.height = 239;
-        if(this.id === 'avatar1') {
-            this.x = width/2 - 308;
-            this.y = height/2 - 109.5;
-            text("Player 1", this.x + this.width/2, this.y - 20);
-        } else {
-            this.x = width/2 + 108;
-            this.y = height/2 - 109.5;
-            text("Player 2", this.x + this.width/2, this.y - 20);
-        }
-        this.color = color(255, 94, 91, 200);
-    }
-    
 }
 
 function clickableOutside() {
@@ -41,22 +26,35 @@ function clickableOutside() {
         this.textSize = 18;
         this.color = '#353535'
     }
-    if(this.id === 'avatar1' || this.id === 'avatar2') {
-        this.width = 184;
-        this.height = 220;
-        if(this.id === 'avatar1') {
-            this.x = width/2 - 300;
-            this.y = height/2 - 100;
-        } else {
-            this.x = width/2 + 116;
-            this.y = height/2 - 100;
-        }
-        this.color = color(244, 209, 174, 170);
-    }
-    
 }
 
-
+/**
+ * Utility class for defining each screen of the game.
+ * ------------------------------------------------------------------------------------
+ * Each Screen object has data which is gathered from 4 separate CSV files (optional - it isn't
+ * required for a Screen to have all 4 CSVs). 
+ *  - An NPC CSV file - Determines name, position, scale, and sprite image/animation of the NPCs 
+ *    for a given screen.
+ *  - An Interaction CSV file - Determines the dialogue options for each NPC in a given screen.
+ *  - A Decoration CSV file - Determines the name, position, scale, image, and whether a decorative
+ *    sprite is collidable in a given screen.
+ *  - A Walls CSV file - Determines the name, position, and image for each of the walls in a given screen.
+ * 
+ * All these CSV files are saved in tables stored in each Screen
+ * 
+ * Each screen also has a Clickables array, but this is only utilized by the starting screens.
+ * 
+ * The npc array contains references to the NPC Sprite Objects themselves while the npcSprites Group contains
+ * references to the p5 play sprites of these NPCs. It is important to make this distinction because NPC class
+ * functions will not work on the p5 play sprites.
+ * 
+ * The walls array contains references to the Sprite objects while the wallSprites Group contains references to
+ * the p5 play sprites of the custom Sprite objects. It is important to make this distinction because Sprite class
+ * functions will not work on the p5 play sprites.
+ * 
+ * The decoSprites Group contains references to all the non-collidable decoration sprites, while the decoColliders
+ * Group contains references to all the collidable decoration sprites.
+ */
 class Screen {
     constructor(path1, path2, path3, path4, bgColor, bg, north, south, east, west) {
         this.bgColor = bgColor;
@@ -67,7 +65,8 @@ class Screen {
         this.clickables = [];
         this.npcArray = [];
         this.npcSprites = new Group();
-        this.walls = new Group();
+        this.walls = []
+        this.wallSprites = new Group();
         this.decoSprites = new Group();
         this.decoColliders = new Group();
 
@@ -112,28 +111,36 @@ class Screen {
     getNPCs() {
         for(let i = 0; i < this.npcTable.getRowCount(); i++) {
             let npcName = this.npcTable.getString(i, 'Name');
+            let npcScale = this.npcTable.getString(i, 'Scale');
+            let visibility = this.npcTable.getNum(i, 'Visible');
             let xPos = eval(this.npcTable.getString(i, 'X'));
             let yPos = eval(this.npcTable.getString(i, 'Y'));
-            let npc = new NPC(npcName, xPos, yPos);
+            let prompt = this.npcTable.getString(i, 'Prompt');
+            let npc = new NPC(npcName, xPos, yPos, prompt);
             if(this.npcTable.getNum(i,'Static')) {
-                let staticImage = loadImage(this.npcTable.getString(i, 'Image'), 
-                    () => {
-                        npc.newIdleImage(this.npcTable.getString(i, 'ImageName'), staticImage);
-                    }
-                )
+                let images = this.npcTable.getString(i, 'Image').split(',');
+                let names = this.npcTable.getString(i, 'ImageName').split(',');
+                for(let i = 0; i < images.length; i++) {
+                    npc.newIdleImage(names[i], loadImage(images[i]));
+                }
+            } else {
+                npc.sprite.width = 100;
+                npc.sprite.height = 100;
             }
-            npc.sprite.scale = 1.3;
+            npc.sprite.scale = npcScale;
+            npc.sprite.visible = visibility;
             this.npcSprites.add(npc.sprite);
             this.npcArray.push(npc);
         }
-        // console.log(this.npcArray);
     }
 
     getInteractions() {
         for(let i = 0; i < this.interactionTable.getRowCount(); i++) {
             let currNPCIndex = this.interactionTable.getNum(i, 'NPCIndex');
+            let dialogue = this.interactionTable.getString(i, 'Dialogue');
+            let level = this.interactionTable.getNum(i, 'ProgressLevel');
             let npc = this.npcArray[currNPCIndex];
-            npc.addSingleInteraction(this.interactionTable.getString(i, 'Dialogue'));
+            npc.addSingleInteraction(dialogue, level);
         }
     }
 
@@ -143,42 +150,59 @@ class Screen {
             let x = eval(this.wallsTable.getString(i, 'X'));
             let y = eval(this.wallsTable.getString(i, 'Y'));
             let image = loadImage(this.wallsTable.getString(i, 'Image'), () => {
-                let wallSprite = createSprite(x, y);
-                wallSprite.addImage(wallLabel, image);
-                wallSprite.setDefaultCollider();
-                this.walls.add(wallSprite);
+                let wallSprite = new Sprite(wallLabel, x, y);
+                wallSprite.newIdleImage('wall',image);
+                wallSprite.sprite.setDefaultCollider();
+                this.walls.push(wallSprite);
+                this.wallSprites.add(wallSprite.sprite);
             });
         }
     }
 
+    addWall(path, x, y) {
+        let image = loadImage(path, () => {
+            let newWall = new Sprite('NewWall', x, y);
+            newWall.newIdleImage('wall', image);
+            newWall.sprite.setDefaultCollider();
+            this.walls.push(newWall);
+            this.wallSprites.add(newWall.sprite);
+        })
+    }
+
     getDeco() {
-        console.log(this.decoTable)
         for(let i = 0; i < this.decoTable.getRowCount(); i++) {
             let decoLabel = this.decoTable.getString(i, 'Name');
             let x = eval(this.decoTable.getString(i, 'X'));
             let y = eval(this.decoTable.getString(i, 'Y'));
             let collisionCheck = this.decoTable.getNum(i, 'Collision-Object');
-
-            let image = loadImage(this.decoTable.getString(i, 'Image'), () => {
-                let decoSprite = createSprite(x, y);
-                decoSprite.addImage(decoLabel, image);
+            let imagePath = this.decoTable.getString(i, 'Image');
+            let scale = this.decoTable.getNum(i, 'Scale');
+            let decoSprite;
+            if(imagePath === '') {
                 if(collisionCheck) {
-                    decoSprite.setDefaultCollider();
-                    this.decoColliders.add(decoSprite);
+                    decoSprite = createSprite(x, y, 80, 80);
+                } else {
+                    decoSprite = createSprite(x, y, 50, 50);
                 }
-                this.decoSprites.add(decoSprite);
-            });
+                
+            } else {
+                let image = loadImage(imagePath);
+                decoSprite = createSprite(x, y);
+                decoSprite.addImage(decoLabel, image);
+            }
+            decoSprite.scale = scale;
+            if(collisionCheck) {
+                decoSprite.setDefaultCollider();
+                this.decoColliders.add(decoSprite);
+            }
+            this.decoSprites.add(decoSprite);
         }
     }
 
     draw() {
-        
+        drawSprites(this.wallSprites);
         drawSprites(this.decoSprites);
         drawSprites(this.npcSprites);
-        this.npcArray.forEach((e) => {
-            e.displayInteractPrompt()
-        })
-        drawSprites(this.walls);
         this.clickables.forEach((e) => e.draw());
     }
 
@@ -200,6 +224,30 @@ class Screen {
     drawClickables() {
         if(this.clickables.length > 0) {
             this.clickables.forEach((e) => e.draw());
+        }
+    }
+
+    getNPC(name) {
+        for(let i = 0; this.npcArray.length; i++) {
+            if(this.npcArray[i].name === name) {
+                return this.npcArray[i];
+            }
+        }
+    }
+
+    updateWalls(array) {
+        for(let i = 0; i < array.length; i++) {
+            let deleteName = array[i];
+            for(let i = 0; i < this.walls.length; i++){
+                if(deleteName === this.walls[i].name) {
+                    this.walls.splice(i, 1);
+                    break;
+                }
+            }
+        }
+        this.wallSprites.clear();
+        for(let i = 0; i < this.walls.length; i++) {
+            this.wallSprites.add(this.walls[i].sprite);
         }
     }
 }
@@ -243,48 +291,11 @@ class HomeScreen extends Screen {
 class CharacterScreen extends Screen {
     constructor(path1, path2, path3, bgColor, bg, north, south, east, west) {
         super(path1, path2, path3, bgColor, bg, north, south, east, west);
-        this.title = 'Select Your Character'
-        this.nextID = 'Memory Hall I';
-        this.selectionText = 'No character has been selected.'
-        this.input = null;
-        this.button = null;
+        this.title = 'Introduction / How to Play'
+        this.nextID = 'Memory Hall South';
     }
 
-    updateSelection(newText) {
-        this.selectionText = newText;
-    }
-
-    setup(char1, char2, nextScreenFunc, setNameFunc, charSelectFunc, font) {
-        let charSelect = new Clickable();
-        charSelect.id = 'avatar1';
-        charSelect.image = char1
-        charSelect.color = color(244, 209, 174, 170);
-        charSelect.width = 184;
-        charSelect.height = 220;
-        charSelect.x = width/2 - 300;
-        charSelect.y = height/2 - 100;
-        charSelect.text = '';
-        charSelect.onPress = charSelectFunc;
-        charSelect.stroke = color(244, 209, 174);
-        charSelect.strokeWeight = 3;
-        charSelect.onHover = clickableHover;
-        charSelect.onOutside = clickableOutside;
-
-        let charSelect2 = new Clickable();
-        charSelect2.id = 'avatar2';
-        charSelect2.color = color(244, 209, 174, 170);
-        charSelect2.width = 184;
-        charSelect2.height = 220;
-        charSelect2.x = width/2 + 116;
-        charSelect2.y = height/2 - 100;
-        charSelect2.text = '';
-        charSelect2.image = char2;
-        charSelect2.onPress = charSelectFunc;
-        charSelect2.stroke = color(244, 209, 174);
-        charSelect2.strokeWeight = 3;
-        charSelect2.onHover = clickableHover;
-        charSelect2.onOutside = clickableOutside;
-
+    setup(nextScreenFunc, font) {
         let next = new Clickable();
         next.id = 'characterNext'
         next.color = "#353535";
@@ -295,31 +306,12 @@ class CharacterScreen extends Screen {
         next.x = width/2 - 150;
         next.y = height - 150;
         next.textFont = font;
-        next.text = "Proceed to Instructions"
+        next.text = "Start Game"
         next.onPress = nextScreenFunc;
         next.onHover = clickableHover;
         next.onOutside = clickableOutside;
 
-        this.input = createInput();
-        this.input.addClass('nameInput');
-        console.log(this.input);
-        this.input.hide();
-        this.button = createButton('Submit');
-        this.button.addClass('inputButton');
-        this.button.hide();
-        this.button.mousePressed(setNameFunc);
-
-        this.clickables.push(charSelect, charSelect2, next);
-    }
-
-    showHTML() {
-        this.input.show();
-        this.button.show();
-    }
-
-    removeHTML() {
-        this.input.remove();
-        this.button.remove();
+        this.clickables.push(next);
     }
 
     draw() {
@@ -331,27 +323,10 @@ class CharacterScreen extends Screen {
         rect(width/2, height/2, 1060, 600, 28);
         textAlign(CENTER);
         textSize(50);
-        super.draw();
+        this.clickables[0].draw();
+        push();
+        imageMode(CENTER);
+        image(instructionImg, canvasWidth/4, canvasHeight/2 + 50);
+        pop();
     }
 }
-
-// class InstructionScreen extends Screen {
-//     constructor() {
-//         super();
-//     }
-
-//     setup(nextScreenFunc) {
-//         let next = new Clickable();
-//         next.color = "#11B5E4";
-//         next.textColor = "white";
-//         next.width = 300;
-//         next.height = 70;
-//         next.textSize = 18;
-//         next.x = width/2 - 150;
-//         next.y = height - 150;
-//         next.text = "Start Game"
-//         // next.textFont = this.bodyFont;
-//         next.onPress = nextScreenFunc
-//         this.clickables.push(next);
-//     }
-// }

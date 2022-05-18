@@ -1,3 +1,21 @@
-NPCIndex,Dialogue
-0,"Hola, mijo!"
-0,"Be careful outside, don't get into trouble."
+NPCIndex,Dialogue,ProgressLevel
+0,"Buenos dias, mijo. You should go get your stuff ready for school, you don't wanna be late!",0
+0,"Buenos dias, mijo. You should go get your stuff ready for school, you don't wanna be late!",1
+0,"Looks like you're ready to head out, but...before you go.",2
+0,"I watched the news earlier, I think you should have a look too. Come back here afterwards.",2
+0,"Buenos dias, mijo - oh! Looks like you're ready for school already. Before you get going though -",3
+0,"Did you catch the news? Go take a look and get back to me afterwards.",3
+0,"Buenos dias, mijo - oh! You saw the news?",4
+0,"I wanted to talk to you about it...but before that, go get your things for school and get back to me!",4
+0,"Oh! You saw the news? I wanted to talk to you about that, but before I do - go get your stuff for school already!",5
+0,"Good! You're all ready for school. Let's have that talk now.",6
+0,"Thank you for checking out the news, let's have that talk now.",7
+0,"Buenos dias, mijo - oh! Looks like you're ready for school. Hm? You watched the news too? I wanted to talk to you about that -",8
+0,"It looks like they terminated DACA and aren't accepting any new applications. I'm sorry, mijo...",9
+0,"I was hoping we could start getting your documents in order for this year, but now we won't be able to.",9
+0,"It'll be okay ... We'll just have to hold out until they change it in the future. I know they will.",9
+0,"I won't keep you any longer, you should head to school. Be safe, ¡te quiero mucho!",9
+0,"Welcome back, mijo. How was school?",10
+0,What!? I can't believe those kids were saying things like that...,10
+0,"Forget them! Whatever they say doesn't matter, you keep working hard for yourself!",10
+0,"Your Dad and I will always support you, remember that. You should go call him! It's important to stay in touch with him.",10

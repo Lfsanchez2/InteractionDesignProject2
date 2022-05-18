@@ -1,5 +1,6 @@
 Name,X,Y,Image
-Left,(canvasWidth/2) - 460,(canvasHeight/2),assets/MemoryHall/MH2RightWall.png
+Left,(canvasWidth/2) - 460,(canvasHeight/2),assets/MemoryHall/MHFullLeftWall.png
 TopRight,(canvasWidth/2) + 460,(canvasHeight/2) - 190,assets/MemoryHall/MHTopRight.png
 BottomRight,(canvasWidth/2) + 460,(canvasHeight/2) + 190,assets/MemoryHall/MHBottomRight.png
 Top,(canvasWidth/2),(canvasHeight/2) - 290,assets/MemoryHall/MHTopWall.png
+Right,(canvasWidth/2) + 460,(canvasHeight/2),assets/MemoryHall/MHFullRightWall.png

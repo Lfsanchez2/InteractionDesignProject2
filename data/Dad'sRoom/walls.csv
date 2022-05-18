@@ -1,0 +1,6 @@
+Name,X,Y,Image
+Middle,canvasWidth/2,canvasHeight/2,assets/DadApartment/MiddleWall.png
+TopLeft,(canvasWidth/2)-262,(canvasHeight/2)-285,assets/DadApartment/AptTopWall.png
+BottomLeft,(canvasWidth/2)-258,(canvasHeight/2)+285,assets/DadApartment/AptBottomWall.png
+TopRight,(canvasWidth/2)+258,(canvasHeight/2)-285,assets/DadApartment/DadTopWall.png
+BottomRight,(canvasWidth/2)+256,(canvasHeight/2)+285,assets/DadApartment/DadBottomWall.png

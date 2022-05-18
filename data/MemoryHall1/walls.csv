@@ -4,3 +4,5 @@ BottomLeft,(canvasWidth/2) - 460,(canvasHeight/2) + 190,assets/MemoryHall/MHBott
 TopRight,(canvasWidth/2) + 460,(canvasHeight/2) - 190,assets/MemoryHall/MHTopRight.png
 BottomRight,(canvasWidth/2) + 460,(canvasHeight/2) + 190,assets/MemoryHall/MHBottomRight.png
 Bottom,(canvasWidth/2),(canvasHeight/2) + 290,assets/MemoryHall/MHBottomWall.png
+FullLeft,(canvasWidth/2) - 460,(canvasHeight/2),assets/MemoryHall/MHFullLeftWall.png
+FullRight,(canvasWidth/2) + 460,(canvasHeight/2),assets/MemoryHall/MHFullRightWall.png

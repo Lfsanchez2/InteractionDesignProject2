@@ -1,0 +1,25 @@
+Name,X,Y,Image,Collision-Object,Scale
+Chair,(canvasWidth/2) - 290,148,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) - 140,148,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) + 10,148,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) + 160,148,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) - 290,(canvasHeight/2)-2,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) - 140,(canvasHeight/2)-2,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) + 10,(canvasHeight/2)-2,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) + 160,(canvasHeight/2)-2,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) - 290,canvasHeight - 152,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) - 140,canvasHeight - 152,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) + 10,canvasHeight - 152,assets/school/chair.png,0,0.6
+Chair,(canvasWidth/2) + 160,canvasHeight - 152,assets/school/chair.png,0,0.6
+Desk,(canvasWidth/2) - 250,150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) - 100,150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) + 50,150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) + 200,150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) - 250,(canvasHeight/2),assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) - 100,(canvasHeight/2),assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) + 50,(canvasHeight/2),assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) + 200,(canvasHeight/2),assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) - 250,canvasHeight - 150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) - 100,canvasHeight - 150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) + 50,canvasHeight - 150,assets/school/desk.png,1,0.7
+Desk,(canvasWidth/2) + 200,canvasHeight - 150,assets/school/desk.png,1,0.7

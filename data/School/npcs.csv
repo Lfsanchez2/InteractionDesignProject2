@@ -1,0 +1,5 @@
+Name,Prompt,Scale,X,Y,Static,ImageName,Image,Animated,AniName,StartFrame,EndFrame,Visible
+Student 1,Press 'e' to talk to student,1,canvasWidth/2 + 30,canvasHeight - 260,1,student,assets/School/student.png,0,,,,1
+Student 2,Press 'e' to talk to student,1,canvasWidth/2 - 110,canvasHeight - 260,1,student,assets/School/student.png,0,,,,1
+Student 3,Press 'e' to talk to student,1,canvasWidth/2 + 100,250,1,student,assets/School/student.png,0,,,,1
+Student 4,Press 'e' to talk to student,1,330,250,1,student,assets/School/student.png,0,,,,1

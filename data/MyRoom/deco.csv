@@ -1,0 +1,4 @@
+Name,X,Y,Image,Collision-Object,Scale
+Table,195,185,assets/Apartment/MyRoom/table.png,1,1
+Bed,343,510,assets/Apartment/MyRoom/bed.png,1,1
+Dresser,930,550,assets/Apartment/MyRoom/dresser.png,1,1

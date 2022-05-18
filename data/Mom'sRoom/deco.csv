@@ -1,4 +1,4 @@
-Name,X,Y,Image,Collision-Object
-TopWall,canvasWidth/2,(canvasHeight/2) - 235,assets/Apartment/MomRoom/top-wall.png,0
-Nightstand,480,190,assets/Apartment/MomRoom/nightstand.png,1
-Bed,260,250,assets/Apartment/MomRoom/bed.png,1
+Name,X,Y,Image,Collision-Object,Scale
+TopWall,canvasWidth/2,(canvasHeight/2) - 235,assets/Apartment/MomRoom/top-wall.png,0,1
+Nightstand,480,190,assets/Apartment/MomRoom/nightstand.png,1,1
+Bed,260,250,assets/Apartment/MomRoom/bed.png,1,1
